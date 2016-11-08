@@ -11,6 +11,13 @@ stage.addChild(gameView);
 
 var circleArr=[[],[],[],[],[],[],[],[],[]];
 var cat;
+var move_none=-1,
+     move_left=0,
+    move_up_left=1,
+    move_up_right=2,
+    move_right=3,
+    move_down_right=4,
+    move_down_left=5;
 function addCircle(){
     for(var indexY=0;indexY<9;indexY++){
         for(var indexX=0;indexX<9;indexX++){
@@ -29,52 +36,117 @@ function addCircle(){
         }
     }
 }
+function getMoveDir(cat){
+    var can=true;
+    var distanceMap=[];
+    // left
+    for(var x=cat.indexX;x>0;x--){
+        if(circleArr[x][cat.indexY].getCircleType()==Circle.TYPE_SELECTED) {
+            can = false;
+            distanceMap[move_left]=cat.indexX-x;
+            break;
+        }
+    }
+    if(can){
+        return move_left;
+    }
+    //left up
+    can=true;
+    var x=cat,indexX,y=cat.indexY;
+    while(true){
+        if(circleArr[x][y].getCircleType()==Circle.TYPE_SELECTED){
+            can=false;
+            distanceMap[move_up_left]=cat.indexY-y;
+            break;
+        }
+        if(y%2==1){
+            x--;
+        }
+        y--;
+        if(y<0||x<0){
+            break;
+        }
+        if(can){
+            return move_up_left;
+        }
+    }
+    // right up
+    can=true;
+    x=cat.indexX,y=cat.indexY;
+    while(true){
+        if(circleArr[x][y].getCircleType()==Circle.TYPE_SELECTED){
+            can=false;
+            distanceMap[move_up_right]=cat.indexY-y;
+            break;
+        }
+        if(y%2==1){
+            x++;
+        }
+        y--;
+        if(y<0||x>8){
+            break;
+        }
+    }
+    if(can){
+        return move_up_right;
+    }
+
+    //right
+    can=true;
+    for(var x=cat.indexX;x<9;x++){
+        if(circleArr[x][cat.indexY].getCircleType()==Circle.TYPE_SELECTED){
+            can=false;
+            distanceMap[move_right]=x-cat.indexX;
+            break;
+        }
+    }
+    if(can){
+        return move_right;
+    }
+    //right down
+    can=true;
+    x=indexX,y=indexY;
+    while(true){
+        if(circleArr[x][y].getCircleType()==Circle.TYPE_SELECTED){
+            can=false;
+            distanceMap[move_down_right]=y-cat.indexY;
+            break;
+        }
+        if(y%2==1){
+            x++;
+        }
+        y++;
+        if(x>8||y>8){
+            break;
+        }
+    }
+    if(can){
+        return move_down_right;
+    }
+
+    //left down
+    can=true;
+    x=indexX,y=indexY;
+    while(true){
+        if(circleArr[x][y].getCircleType()==Circle.TYPE_SELECTED){
+            can=false;
+            distanceMap[move_down_left]=y-cat.indexY;
+            break;
+        }
+    }
+    if(can){
+        return move_down_left;
+    }
+}
 function circleClicked(e){
     var _t=e.target;
-    if(_t.getCircleType()!=3){
-        _t.setCircleType(2);
+    if(_t.getCircleType()!=Circle.TYPE_CAT){
+        _t.setCircleType(Circle.TYPE_SELECTED);
     }
     if(cat.indexX==0||cat.indexX==8||cat.indexY==0||cat.indexY==8){
         alert('游戏结束');
+        return;
     }
-    var leftCircle=circleArr[cat.indexX-1][cat.indexY];
-    var rightCircle=circleArr[cat.indexX+1][cat.indexY];
-    var topLeftCircle=circleArr[cat.indexX][cat.indexY-1];
-    var topRightCircle=circleArr[cat.indexX+1][cat.indexY-1];
-    var bottomLeftCircle=circleArr[cat.indexX-1][cat.indexY+1];
-    var bottomRightCircle=circleArr[cat.indexX][cat.indexY+1];
-    if(leftCircle.getCircleType()==1){
-        leftCircle.setCircleType(3);
-        cat.setCircleType(1);
-        cat=leftCircle;
-    }
-    else if(rightCircle.getCircleType()==1){
-        rightCircle.setCircleType(3);
-        cat.setCircleType(1);
-        cat=rightCircle;
-    }
-    else if(topLeftCircle.getCircleType()==1){
-        topLeftCircle.setCircleType(3);
-        cat.setCircleType(1);
-        cat=topLeftCircle;
-    }
-    else if(topRightCircle.getCircleType()==1){
-        topRightCircle.setCircleType(3);
-        cat.setCircleType(1);
-        cat=topRightCircle;
-    }
-    else if(bottomLeftCircle.getCircleType()==1){
-        bottomLeftCircle.setCircleType(3);
-        cat.setCircleType(1);
-        cat=bottomLeftCircle;
-    }
-    else if(bottomRightCircle.getCircleType()==1){
-        bottomRightCircle.setCircleType(3);
-        cat.setCircleType(1);
-        cat=bottomRightCircle;
-    }
-    else{
-        alert('死');
-    }
+
 }
 addCircle();
