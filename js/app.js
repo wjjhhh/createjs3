@@ -21,4 +21,4 @@ function addCircle(){
         }
     }
 }
-addCircle();
+addCircle()
