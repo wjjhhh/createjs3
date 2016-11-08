@@ -40,9 +40,9 @@ function addCircle(){
     }
 }
 function getMoveDir(cat){
-    var can=true;
     var distanceMap=[];
     // left
+    var can=true;
     for(var x=cat.indexX;x>=0;x--){
         if(circleArr[x][cat.indexY].getCircleType()==Circle.TYPE_SELECTED) {
             can = false;
@@ -60,9 +60,10 @@ function getMoveDir(cat){
         if(circleArr[x][y].getCircleType()==Circle.TYPE_SELECTED){
             can=false;
             distanceMap[move_up_left]=cat.indexY-y;
+            console.log(cat.indexY)
             break;
         }
-        if(y%2==1){
+        if(y%2==0){
             x--;
         }
         y--;
@@ -74,6 +75,7 @@ function getMoveDir(cat){
         }
     }
     // right up
+    console.log(2222);
     can=true;
     x=cat.indexX,y=cat.indexY;
     while(true){
@@ -147,6 +149,7 @@ function getMoveDir(cat){
     if(can){
         return move_down_left;
     }
+
 }
 function circleClicked(e){
     var _t=e.target;
@@ -179,7 +182,7 @@ function circleClicked(e){
                 break;
             case move_right:
                 cat.setCircleType(Circle.TYPE_UNSELECTED);
-                cat=circleArr[cat.index+1][cat.indexY];
+                cat=circleArr[cat.indexX+1][cat.indexY];
                 cat.setCircleType(Circle.TYPE_CAT);
                 break;
             case move_down_right:
