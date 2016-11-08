@@ -3,7 +3,7 @@
  */
 function Circle(){
     createjs.Shape.call(this);//将createjs.Shape的方法全部当作参数传进来
-    this,setCircleType=function (type) {
+    this.setCircleType=function (type) {
         this._CircleType=type;
         switch (type){
             case 1:

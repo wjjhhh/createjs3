@@ -1,7 +1,7 @@
 /**
  * Created by Employee on 2016/11/8.
  */
-var stage=createjs.Stage('gameView');
+var stage=new createjs.Stage('gameView');
 createjs.Ticker.setFPS(30);
 createjs.Ticker.addEventListener('tick',stage);
 var gameView = new createjs.Container();
@@ -21,4 +21,4 @@ function addCircle(){
         }
     }
 }
-addCircle()
+addCircle();
