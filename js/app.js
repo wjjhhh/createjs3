@@ -32,6 +32,9 @@ function addCircle(){
                 c.setCircleType(3);
                 cat=c;
             }
+            else if(Math.random()<0.1){
+                c.setCircleType(Circle.TYPE_SELECTED);
+            }
             c.addEventListener("click",circleClicked);
         }
     }
@@ -40,7 +43,7 @@ function getMoveDir(cat){
     var can=true;
     var distanceMap=[];
     // left
-    for(var x=cat.indexX;x>0;x--){
+    for(var x=cat.indexX;x>=0;x--){
         if(circleArr[x][cat.indexY].getCircleType()==Circle.TYPE_SELECTED) {
             can = false;
             distanceMap[move_left]=cat.indexX-x;
@@ -52,7 +55,7 @@ function getMoveDir(cat){
     }
     //left up
     can=true;
-    var x=cat,indexX,y=cat.indexY;
+    var x=cat.indexX,y=cat.indexY;
     while(true){
         if(circleArr[x][y].getCircleType()==Circle.TYPE_SELECTED){
             can=false;
@@ -105,7 +108,7 @@ function getMoveDir(cat){
     }
     //right down
     can=true;
-    x=indexX,y=indexY;
+    x=cat.indexX,y=cat.indexY;
     while(true){
         if(circleArr[x][y].getCircleType()==Circle.TYPE_SELECTED){
             can=false;
@@ -126,11 +129,18 @@ function getMoveDir(cat){
 
     //left down
     can=true;
-    x=indexX,y=indexY;
+    x=cat.indexX,y=cat.indexY;
     while(true){
         if(circleArr[x][y].getCircleType()==Circle.TYPE_SELECTED){
             can=false;
             distanceMap[move_down_left]=y-cat.indexY;
+            break;
+        }
+        if(y%2==0){
+            x--;
+        }
+        y++;
+        if(x<0||y>8){
             break;
         }
     }
@@ -143,10 +153,49 @@ function circleClicked(e){
     if(_t.getCircleType()!=Circle.TYPE_CAT){
         _t.setCircleType(Circle.TYPE_SELECTED);
     }
+    else{
+        return;
+    }
     if(cat.indexX==0||cat.indexX==8||cat.indexY==0||cat.indexY==8){
         alert('游戏结束');
         return;
     }
+    var dir=getMoveDir(cat);
+        switch (dir){
+            case move_left:
+                cat.setCircleType(Circle.TYPE_UNSELECTED);
+                cat=circleArr[cat.indexX-1][cat.indexY];
+                cat.setCircleType(Circle.TYPE_CAT);
+                break;
+            case move_up_left:
+                cat.setCircleType(Circle.TYPE_UNSELECTED);
+                cat=circleArr[cat.indexY%2?cat.indexX:cat.indexX-1][cat.indexY-1];
+                cat.setCircleType(Circle.TYPE_CAT);
+                break;
+            case move_up_right:
+                cat.setCircleType(Circle.TYPE_UNSELECTED);
+                cat=circleArr[cat.indexY%2?cat.indexX+1:cat.indexX][cat.indexY-1];
+                cat.setCircleType(Circle.TYPE_CAT);
+                break;
+            case move_right:
+                cat.setCircleType(Circle.TYPE_UNSELECTED);
+                cat=circleArr[cat.index+1][cat.indexY];
+                cat.setCircleType(Circle.TYPE_CAT);
+                break;
+            case move_down_right:
+                cat.setCircleType(Circle.TYPE_UNSELECTED);
+                cat=circleArr[cat.indexY%2?cat.indexX+1:cat.indexX][cat.indexY+1];
+                cat.setCircleType(Circle.TYPE_CAT);
+                break;
+            case move_down_left:
+                cat.setCircleType(Circle.TYPE_UNSELECTED);
+                cat=circleArr[cat.indexY%2?cat.indexX:cat.indexX-1][cat.indexY+1];
+                break;
+            default:
+                alert('游戏结束');
+        }
 
-}
+    }
+
+
 addCircle();
