@@ -6,14 +6,14 @@ function Circle(){
     this.setCircleType=function (type) {
         this._CircleType=type;
         switch (type){
-            case 1:
-                this.setColor("#ff0000");
+            case Circle.TYPE_UNSELECTED:
+                this.setColor("#aaa");//未点击背景
                 break;
-            case 2:
-                this.setColor("#ff6600");
+            case Circle.TYPE_SELECTED:
+                this.setColor("#ff6600");//点击背景
                 break;
-            case 3:
-                this.setColor("#0000ff");
+            case Circle.TYPE_CAT:
+                this.setColor("#0000ff");//猫
                 break;
         }
     }
@@ -28,3 +28,6 @@ function Circle(){
     this.setCircleType(1);
 }
 Circle.prototype=new createjs.Shape();//构建Circle对象，继承所有createjs方法以及之前创建的方法
+Circle.TYPE_UNSELECTED=1;
+Circle.TYPE_SELECTED=2;
+Circle.TYPE_CAT=3;
